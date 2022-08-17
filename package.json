@@ -1,0 +1,44 @@
+{
+	"name": "jassoconfessapi",
+	"version": "0.0.1",
+	"description": "API for Jasso Confession Web Page",
+	"main": "build/index.js",
+	"scripts": {
+		"start": "tsc && node build/index.js",
+		"build": "tsc",
+		"watch": "tsc --watch",
+		"lint": "eslint .",
+		"lint:fix": "eslint --fix ."
+	},
+	"keywords": [
+		"api",
+		"express",
+		"nodejs",
+		"node",
+		"javascript"
+	],
+	"author": "Christian Harjuno (SorataBaka)",
+	"license": "UNLICENSED",
+	"dependencies": {
+		"body-parser": "^1.20.0",
+		"cors": "^2.8.5",
+		"dotenv": "^16.0.1",
+		"express": "^4.18.1",
+		"express-rate-limit": "^6.5.1",
+		"mongoose": "^6.5.2",
+		"morgan": "^1.10.0"
+	},
+	"devDependencies": {
+		"@commitlint/cli": "^17.0.3",
+		"@commitlint/config-conventional": "^17.0.3",
+		"@types/body-parser": "^1.19.2",
+		"@types/cors": "^2.8.12",
+		"@types/express": "^4.17.13",
+		"@types/morgan": "^1.9.3",
+		"@typescript-eslint/eslint-plugin": "^5.33.1",
+		"@typescript-eslint/parser": "^5.33.1",
+		"eslint": "^8.22.0",
+		"husky": "^8.0.1",
+		"typescript": "^4.7.4"
+	}
+}
