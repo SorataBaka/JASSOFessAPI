@@ -19,7 +19,6 @@ export default async (req: Request, res: Response) => {
 		date: new Date(),
 	});
 	const save = await confession.save();
-	console.log(save);
 
 	return res.json({
 		status: 200,
