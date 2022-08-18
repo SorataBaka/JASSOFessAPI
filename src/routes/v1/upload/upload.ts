@@ -11,12 +11,13 @@ export default async (req: Request, res: Response) => {
 	const message = req.body["message"];
 	if (!message) return failedRequest(res, "No message provided");
 	const messageLength = message.length;
-	if (messageLength > 140 || messageLength < 10)
+	if (messageLength > 400 || messageLength < 10)
 		return failedRequest(res, "Message too long or too short");
 
 	const confession = new ConfessionSchema({
 		confession: message,
 		date: new Date(),
+		likes: 0,
 	});
 	const save = await confession.save();
 

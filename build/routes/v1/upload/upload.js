@@ -16,11 +16,12 @@ exports.default = async (req, res) => {
     if (!message)
         return failedRequest(res, "No message provided");
     const messageLength = message.length;
-    if (messageLength > 140 || messageLength < 10)
+    if (messageLength > 400 || messageLength < 10)
         return failedRequest(res, "Message too long or too short");
     const confession = new confessions_1.default({
         confession: message,
         date: new Date(),
+        likes: 0,
     });
     const save = await confession.save();
     return res.json({

@@ -9,6 +9,14 @@ const confessionSchema = new mongoose_1.default.Schema({
         type: String,
         required: true,
     },
+    date: {
+        type: Date,
+        required: true,
+    },
+    likes: {
+        type: Number,
+        required: true,
+    },
 }, {
     timestamps: true,
 });
