@@ -8,6 +8,7 @@ import rateLimit from "express-rate-limit";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import csrf from "csurf";
+import helmet from "helmet";
 
 const app = express();
 dotenv.config();
@@ -59,7 +60,7 @@ const csrfProtection = csrf({
 		return token;
 	},
 });
-
+app.use(helmet());
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(express.json());
