@@ -20,7 +20,6 @@ export default async (req: Request, res: Response) => {
 	if (!message || !branch) return failedRequest(res, "No message provided");
 	if (!alphanumericCheck(message))
 		return failedRequest(res, "Message contains invalid characters");
-
 	if (message.length > 400 || message.length < 10)
 		return failedRequest(res, "Message too long or too short");
 	if (branch.toUpperCase() !== "OSAKA" && branch.toUpperCase() !== "TOKYO")
