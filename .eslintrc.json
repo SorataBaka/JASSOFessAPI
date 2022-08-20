@@ -14,7 +14,8 @@
 		"indent": ["error", "tab"],
 		"linebreak-style": ["error", "windows"],
 		"quotes": ["error", "double"],
-		"semi": ["error", "always"]
+		"semi": ["error", "always"],
+		"@typescript-eslint/no-explicit-any": "off"
 	},
 	"ignorePatterns": [
 		"node_modules/",

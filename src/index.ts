@@ -1,14 +1,14 @@
 import express, { Request, Response } from "express";
-import morgan from "morgan";
-import mongoose from "mongoose";
-import dotenv from "dotenv";
 import versionRouter from "./routes/versionrouter";
-import bodyParser from "body-parser";
 import rateLimit from "express-rate-limit";
-import cors from "cors";
 import cookieParser from "cookie-parser";
-import csrf from "csurf";
+import bodyParser from "body-parser";
+import mongoose from "mongoose";
 import helmet from "helmet";
+import morgan from "morgan";
+import dotenv from "dotenv";
+import csrf from "csurf";
+import cors from "cors";
 
 const app = express();
 dotenv.config();
@@ -50,9 +50,7 @@ if (!isDevelopment) {
 		})
 	);
 	console.log("Starting in production mode");
-} else {
-	console.log("Starting in development mode");
-}
+} else console.log("Starting in development mode");
 const csrfProtection = csrf({
 	cookie: true,
 	value: function (req: Request) {
@@ -83,6 +81,5 @@ app.listen(PORT, async () => {
 	const newConnection = await mongoose.connect(mongooseConnectionUrl);
 	if (newConnection.connections.length !== 0)
 		console.log("Connected to MongoDB");
-
 	console.log(`Server started on port ${PORT}`);
 });
