@@ -1,21 +1,15 @@
-import { ErrorRequestHandler } from "express";
+import { Request, Response, NextFunction } from "express";
 
-const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
-	if (res.headersSent) {
-		return next(err);
+export default (err: any, req: Request, res: Response, next: NextFunction) => {
+	if (!err) {
+		next();
 	}
-	const status = err.status || 500;
-	const message = err.message || "Something went wrong";
-	const code = err.code || "INTERNALSERVERERROR";
-
-	return res.json({
-		status: status,
+	res.status(500).json({
+		status: 500,
 		isValid: false,
 		data: {
-			message,
-			code,
+			message: err.message || "Internal server error",
+			code: err.code || "INTERNALSERVERERROR",
 		},
 	});
 };
-
-export default errorHandler;

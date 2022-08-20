@@ -1,95 +1,73 @@
-import express, { Request, Response, NextFunction } from "express";
+import dotenv from "dotenv";
+dotenv.config();
+
+export const mongooseConnectionUrl = process.env.MONGO_URL || undefined;
+export const isDevelopment = process.env.NODE_ENV === "development";
+export const PORT = process.env.PORT || 3000;
+export const kontol = true;
+
+isDevelopment
+	? console.log("Starting in development mode")
+	: console.log("Starting in production mode");
+
+import express, { Request, Response } from "express";
 import versionRouter from "./routes/versionrouter";
-import rateLimit from "express-rate-limit";
+import errorhandler from "./middleware/errorhandler";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
-import helmet from "helmet";
 import morgan from "morgan";
-import dotenv from "dotenv";
-import csrf from "csurf";
+import helmet from "helmet";
+import csurf from "csurf";
 import cors from "cors";
-
 const app = express();
-dotenv.config();
-
-const properOrigin = process.env.TRUE_ORIGIN || "http://localhost:3000";
-const mongooseConnectionUrl = process.env.MONGO_URL || undefined;
-const isDevelopment = process.env.NODE_ENV === "development";
-const PORT = process.env.PORT || 3000;
-
-const rateLimiter = rateLimit({
-	windowMs: 10 * 60 * 1000, // 10 minutes
-	max: 5,
-	message: {
-		status: 429,
-		isValid: false,
-		data: {
-			message: "Too many requests",
-			code: "TOOMANYREQUESTS",
-		},
-	},
-	standardHeaders: true,
-	statusCode: 429,
-	keyGenerator: (req: Request) => {
-		return req.ip;
-	},
-});
 
 if (mongooseConnectionUrl === undefined)
 	throw new Error(
 		"SETUP ERROR: MONGO_URL is not set in the environment variables"
 	);
 
-const csrfProtection = csrf({
+const csurfProtection = csurf({
 	cookie: true,
-	value: function (req: Request) {
-		const token = req.cookies["XSRF-TOKEN"];
-		return token;
+	value: (req: Request) => {
+		return req.cookies["XSRF-TOKEN"];
 	},
 });
 
-app.use(helmet());
 app.use(bodyParser.json());
-app.use(cookieParser());
 app.use(express.json());
-app.use(csrfProtection);
+app.use(errorhandler);
+app.use(
+	cors({
+		allowedHeaders: [
+			"Origin",
+			"X-Requested-With",
+			"Content-Type",
+			"Accept",
+			"X-CSRF-TOKEN",
+			"XSRF-TOKEN",
+		],
+		credentials: true,
+		maxAge: 360000,
+		origin: "*",
+		methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
+		preflightContinue: false,
+		optionsSuccessStatus: 200,
+	})
+);
+app.use(helmet());
+app.use(cookieParser());
+app.use(csurfProtection);
+
 app.use(morgan("dev"));
-app.use(function (_req: Request, res: Response, next: NextFunction) {
-	const headers = {
-		"Access-Control-Allow-Origin": properOrigin,
-		"Access-Control-Allow-Credentials": true,
-		"Access-Control-Allow-Methods": "GET, POST",
-		"Access-Control-Allow-Headers": "Content-Type, Origin, Accept",
-		"Access-Control-Max-Age": "86400",
-		"Content-Type": "application/json",
-		"X-XSS-Protection": "1; mode=block",
-		"X-Frame-Options": "SAMEORIGIN",
-		"X-Content-Type-Options": "nosniff",
-		"Referrer-Policy": "strict-origin-when-cross-origin",
-	};
-	res.header(headers);
-	next();
-});
-if (!isDevelopment) {
-	app.use("/api/v1/post", rateLimiter);
-	app.use(
-		cors({
-			origin: function (origin, callback) {
-				if (origin === properOrigin) {
-					callback(null, true);
-				} else {
-					callback(new Error("Not allowed by CORS"));
-				}
-			},
-		})
-	);
-	console.log("Starting in production mode");
-} else console.log("Starting in development mode");
-// eslint-disable-next-line
+app.use(helmet());
 app.use("/api", versionRouter);
-app.all("/", csrfProtection, (req: Request, res: Response) => {
-	res.cookie("XSRF-TOKEN", req.csrfToken());
+
+app.all("/", csurfProtection, (req: Request, res: Response) => {
+	res.cookie("XSRF-TOKEN", req.csrfToken(), {
+		maxAge: 36000,
+		path: "/",
+	});
 	return res.json({
 		status: 200,
 		isValid: true,
