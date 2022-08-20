@@ -10,6 +10,8 @@ versionRouter.all("/", (_req: Request, res: Response) => {
 		isValid: true,
 		data: {
 			versions: ["./v1"],
+			message: "OK",
+			code: "OK",
 		},
 	});
 });

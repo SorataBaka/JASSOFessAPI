@@ -27,6 +27,9 @@ exports.default = async (req, res) => {
         isValid: true,
         data: {
             confessions,
+            length: confessions.length,
+            message: "OK",
+            code: "OK",
         },
     });
 };

@@ -4,17 +4,10 @@ import list from "./list/listmessages";
 import { Request, Response, NextFunction } from "express";
 import retrieve from "./generate/retrieve";
 import generate from "./generate/generateImage";
-import csrf from "csurf";
-const csrfProtection = csrf({
-	cookie: true,
-	value: function (req: Request) {
-		const token = req.cookies["XSRF-TOKEN"];
-		return token;
-	},
-});
+
 const functionRouter = express.Router();
 
-functionRouter.post("/post", csrfProtection, upload);
+functionRouter.post("/post", upload);
 functionRouter.use(function (
 	// eslint-disable-next-line
 	err: any,
@@ -38,6 +31,7 @@ functionRouter.get("/generate", (_req: Request, res: Response) => {
 		isValid: true,
 		data: {
 			message: "/generate/:id",
+			code: "OK",
 		},
 	});
 });

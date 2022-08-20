@@ -12,6 +12,7 @@ exports.default = async (req, res) => {
             isValid: false,
             data: {
                 message: "Invalid ID",
+                code: "INVALID_ID",
             },
         });
     const confession = await confessions_1.default.find({ _id: postId }).catch(() => {
@@ -24,6 +25,7 @@ exports.default = async (req, res) => {
             confessions: confession,
             length: confession.length,
             message: "OK",
+            code: "OK",
         },
     });
 };

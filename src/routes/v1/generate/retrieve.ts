@@ -8,6 +8,7 @@ export default async (req: Request, res: Response) => {
 			isValid: false,
 			data: {
 				message: "Invalid ID",
+				code: "INVALID_ID",
 			},
 		});
 	const confession = await confessions.find({ _id: postId }).catch(() => {
@@ -21,6 +22,7 @@ export default async (req: Request, res: Response) => {
 			confessions: confession,
 			length: confession.length,
 			message: "OK",
+			code: "OK",
 		},
 	});
 };

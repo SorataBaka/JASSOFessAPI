@@ -1,0 +1,39 @@
+Synthesizing 2/10 solutions
+
+=======
+
+TRUE_ORIGIN = "https://confess.tianharjuno.com"
+
+# Flask-Restplus settings
+RESTPLUS_SWAGGER_UI_DOC_EXPANSION = 'list'
+RESTPLUS_VALIDATE = True
+RESTPLUS_MASK_SWAGGER = False
+RESTPLUS_ERROR_404_HELP = False
+
+# Flask-JWT settings
+JWT_SECRET_KEY = 'super-secret'
+JWT_BLACKLIST_ENABLED = True
+JWT_BLACKLIST_TOKEN_CHECKS = ['access', 'refresh']
+
+# Flask-Mail settings
+MAIL_SERVER = 'smtp.gmail.com'
+MAIL_PORT = 465
+MAIL_USE_TLS = False
+MAIL_USE_SSL = True
+MAIL_USERNAME = '
+
+=======
+
+TRUE_ORIGIN = "https://confess.tianharjuno.com"
+
+# Configure Flask-JWT-Extended
+JWT_SECRET_KEY = "super-secret"
+JWT_BLACKLIST_ENABLED = True
+JWT_BLACKLIST_TOKEN_CHECKS = ["access", "refresh"]
+
+# Configure Flask-Mail
+MAIL_SERVER = "smtp.gmail.com"
+MAIL_PORT = 465
+MAIL_USE_TLS = False
+MAIL_USE_SSL = True
+MAIL_USERNAME = "

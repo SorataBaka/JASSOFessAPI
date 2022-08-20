@@ -24,6 +24,7 @@ exports.default = async (req, res) => {
             isValid: false,
             data: {
                 message: "Invalid ID",
+                code: "INVALID_ID",
             },
         });
     const confession = await confessions_1.default.find({ _id: postId }).catch(() => {
@@ -34,7 +35,8 @@ exports.default = async (req, res) => {
             status: 404,
             isValid: false,
             data: {
-                message: "CONFNOTFOUND",
+                message: "Confession not found",
+                code: "CONFNOTFOUND",
             },
         });
     const confessionText = confession[0].confession;

@@ -4,7 +4,10 @@ const failedRequest = (res: Response, message: string) => {
 	return res.json({
 		status: 400,
 		isValid: false,
-		message: message,
+		data: {
+			message,
+			code: "INVALIDREQUEST",
+		},
 	});
 };
 export default async (req: Request, res: Response) => {
@@ -20,12 +23,12 @@ export default async (req: Request, res: Response) => {
 		likes: 0,
 	});
 	const save = await confession.save();
-
 	return res.json({
 		status: 200,
 		isValid: true,
 		data: {
 			message: "Success",
+			code: "OK",
 			save,
 		},
 	});

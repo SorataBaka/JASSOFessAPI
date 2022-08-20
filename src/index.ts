@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express, { Request, Response, NextFunction } from "express";
 import versionRouter from "./routes/versionrouter";
 import rateLimit from "express-rate-limit";
 import cookieParser from "cookie-parser";
@@ -23,7 +23,11 @@ const rateLimiter = rateLimit({
 	max: 1,
 	message: {
 		status: 429,
-		message: "Too many requests",
+		isValid: false,
+		data: {
+			message: "Too many requests",
+			code: "TOOMANYREQUESTS",
+		},
 	},
 	standardHeaders: true,
 	statusCode: 429,
@@ -37,7 +41,7 @@ if (mongooseConnectionUrl === undefined)
 		"SETUP ERROR: MONGO_URL is not set in the environment variables"
 	);
 if (!isDevelopment) {
-	app.use("/api", rateLimiter);
+	app.use("/api/v1/post", rateLimiter);
 	app.use(
 		cors({
 			origin: function (origin, callback) {
@@ -58,11 +62,29 @@ const csrfProtection = csrf({
 		return token;
 	},
 });
+
 app.use(helmet());
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(express.json());
+app.use(csrfProtection);
 app.use(morgan("dev"));
+app.use(function (_req: Request, res: Response, next: NextFunction) {
+	const headers = {
+		"Access-Control-Allow-Origin": properOrigin,
+		"Access-Control-Allow-Credentials": true,
+		"Access-Control-Allow-Methods": "GET, POST",
+		"Access-Control-Allow-Headers": "Content-Type, Origin, Accept",
+		"Access-Control-Max-Age": "86400",
+		"Content-Type": "application/json",
+		"X-XSS-Protection": "1; mode=block",
+		"X-Frame-Options": "SAMEORIGIN",
+		"X-Content-Type-Options": "nosniff",
+		"Referrer-Policy": "strict-origin-when-cross-origin",
+	};
+	res.header(headers);
+	next();
+});
 // eslint-disable-next-line
 app.use("/api", versionRouter);
 app.all("/", csrfProtection, (req: Request, res: Response) => {

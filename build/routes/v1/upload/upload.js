@@ -8,7 +8,10 @@ const failedRequest = (res, message) => {
     return res.json({
         status: 400,
         isValid: false,
-        message: message,
+        data: {
+            message,
+            code: "INVALIDREQUEST",
+        },
     });
 };
 exports.default = async (req, res) => {
@@ -29,6 +32,7 @@ exports.default = async (req, res) => {
         isValid: true,
         data: {
             message: "Success",
+            code: "OK",
             save,
         },
     });
