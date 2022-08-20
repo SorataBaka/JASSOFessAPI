@@ -1,7 +1,7 @@
 import rateLimit from "express-rate-limit";
 export default rateLimit({
 	windowMs: 10 * 60 * 1000, // 10 minutes
-	max: 1,
+	max: 10,
 	message: {
 		status: 429,
 		isValid: false,

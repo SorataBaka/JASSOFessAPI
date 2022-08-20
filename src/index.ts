@@ -4,7 +4,7 @@ dotenv.config();
 export const mongooseConnectionUrl = process.env.MONGO_URL || undefined;
 export const isDevelopment = process.env.NODE_ENV === "development";
 export const PORT = process.env.PORT || 3000;
-export const kontol = true;
+export const trueOrigin = process.env.TRUE_ORIGIN || "http://localhost:3000";
 
 isDevelopment
 	? console.log("Starting in development mode")
@@ -49,7 +49,7 @@ app.use(
 		],
 		credentials: true,
 		maxAge: 360000,
-		origin: "*",
+		origin: trueOrigin,
 		methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
 		preflightContinue: false,
 		optionsSuccessStatus: 200,
