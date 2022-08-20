@@ -10,16 +10,21 @@ const failedRequest = (res: Response, message: string) => {
 		},
 	});
 };
+const alphanumericCheck = (input: string) => {
+	return /^[a-zA-Z0-9]+$/.test(input);
+};
 export default async (req: Request, res: Response) => {
 	const message = req.body["message"];
 	const branch = req.body["branch"];
+
 	if (!message || !branch) return failedRequest(res, "No message provided");
+	if (!alphanumericCheck(message))
+		return failedRequest(res, "Message contains invalid characters");
+
+	if (message.length > 400 || message.length < 10)
+		return failedRequest(res, "Message too long or too short");
 	if (branch.toUpperCase() !== "OSAKA" && branch.toUpperCase() !== "TOKYO")
 		return failedRequest(res, "Invalid branch");
-
-	const messageLength = message.length;
-	if (messageLength > 400 || messageLength < 10)
-		return failedRequest(res, "Message too long or too short");
 
 	const confession = new ConfessionSchema({
 		confession: message,
