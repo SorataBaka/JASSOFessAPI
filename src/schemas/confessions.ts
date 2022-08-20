@@ -13,6 +13,10 @@ const confessionSchema = new mongoose.Schema(
 			type: Number,
 			required: true,
 		},
+		branch: {
+			type: String,
+			required: true,
+		},
 	},
 	{
 		timestamps: true,

@@ -12,7 +12,11 @@ const failedRequest = (res: Response, message: string) => {
 };
 export default async (req: Request, res: Response) => {
 	const message = req.body["message"];
-	if (!message) return failedRequest(res, "No message provided");
+	const branch = req.body["branch"];
+	if (!message || !branch) return failedRequest(res, "No message provided");
+	if (branch.toUpperCase() !== "OSAKA" && branch.toUpperCase() !== "TOKYO")
+		return failedRequest(res, "Invalid branch");
+
 	const messageLength = message.length;
 	if (messageLength > 400 || messageLength < 10)
 		return failedRequest(res, "Message too long or too short");
@@ -21,6 +25,7 @@ export default async (req: Request, res: Response) => {
 		confession: message,
 		date: new Date(),
 		likes: 0,
+		branch,
 	});
 	const save = await confession.save();
 	return res.json({

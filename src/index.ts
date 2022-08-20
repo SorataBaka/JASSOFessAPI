@@ -20,7 +20,7 @@ const PORT = process.env.PORT || 3000;
 
 const rateLimiter = rateLimit({
 	windowMs: 10 * 60 * 1000, // 10 minutes
-	max: 1,
+	max: 5,
 	message: {
 		status: 429,
 		isValid: false,
@@ -40,21 +40,7 @@ if (mongooseConnectionUrl === undefined)
 	throw new Error(
 		"SETUP ERROR: MONGO_URL is not set in the environment variables"
 	);
-if (!isDevelopment) {
-	app.use("/api/v1/post", rateLimiter);
-	app.use(
-		cors({
-			origin: function (origin, callback) {
-				if (origin === properOrigin) {
-					callback(null, true);
-				} else {
-					callback(new Error("Not allowed by CORS"));
-				}
-			},
-		})
-	);
-	console.log("Starting in production mode");
-} else console.log("Starting in development mode");
+
 const csrfProtection = csrf({
 	cookie: true,
 	value: function (req: Request) {
@@ -85,6 +71,21 @@ app.use(function (_req: Request, res: Response, next: NextFunction) {
 	res.header(headers);
 	next();
 });
+if (!isDevelopment) {
+	app.use("/api/v1/post", rateLimiter);
+	app.use(
+		cors({
+			origin: function (origin, callback) {
+				if (origin === properOrigin) {
+					callback(null, true);
+				} else {
+					callback(new Error("Not allowed by CORS"));
+				}
+			},
+		})
+	);
+	console.log("Starting in production mode");
+} else console.log("Starting in development mode");
 // eslint-disable-next-line
 app.use("/api", versionRouter);
 app.all("/", csrfProtection, (req: Request, res: Response) => {
