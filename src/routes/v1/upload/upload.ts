@@ -11,7 +11,7 @@ const failedRequest = (res: Response, message: string) => {
 	});
 };
 const alphanumericCheck = (input: string) => {
-	return /^[a-zA-Z0-9]+$/.test(input);
+	return /^[\w\-\s]+$/.test(input);
 };
 export default async (req: Request, res: Response) => {
 	const message = req.body["message"];
