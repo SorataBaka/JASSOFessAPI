@@ -68,6 +68,7 @@ app.all("/", csurfProtection, (req: Request, res: Response) => {
 		maxAge: 36000,
 		path: "/",
 		httpOnly: false,
+		sameSite: false,
 	});
 	return res.json({
 		status: 200,
