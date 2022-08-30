@@ -10,7 +10,7 @@ isDevelopment
 	? console.log("Starting in development mode")
 	: console.log("Starting in production mode");
 
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import versionRouter from "./routes/versionrouter";
 import errorhandler from "./middleware/errorhandler";
 import cookieParser from "cookie-parser";
@@ -47,11 +47,11 @@ app.use(
 			"X-CSRF-TOKEN",
 			"XSRF-TOKEN",
 		],
-		credentials: true,
 		maxAge: 360000,
 		origin: trueOrigin,
 		methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
 		preflightContinue: false,
+		credentials: true,
 		optionsSuccessStatus: 200,
 	})
 );
@@ -63,12 +63,22 @@ app.use(morgan("dev"));
 app.use(helmet());
 app.use("/api", versionRouter);
 
+app.use(function (err: Error, req: Request, res: Response, next: NextFunction) {
+	if (err)
+		return res.status(403).json({
+			status: 403,
+			isValid: false,
+			data: {
+				message: err.message,
+			},
+		});
+	return next();
+});
+
 app.all("/", csurfProtection, (req: Request, res: Response) => {
 	res.cookie("XSRF-TOKEN", req.csrfToken(), {
-		maxAge: 36000,
+		maxAge: 36000000,
 		path: "/",
-		httpOnly: false,
-		sameSite: false,
 	});
 	return res.json({
 		status: 200,
