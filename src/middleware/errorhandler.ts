@@ -1,6 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 
-export default (err: any, req: Request, res: Response, next: NextFunction) => {
+export default (
+	err: Error,
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
 	if (!err) {
 		next();
 	}
@@ -9,7 +14,6 @@ export default (err: any, req: Request, res: Response, next: NextFunction) => {
 		isValid: false,
 		data: {
 			message: err.message || "Internal server error",
-			code: err.code || "INTERNALSERVERERROR",
 		},
 	});
 };
