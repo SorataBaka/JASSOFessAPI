@@ -67,6 +67,7 @@ app.all("/", csurfProtection, (req: Request, res: Response) => {
 	res.cookie("XSRF-TOKEN", req.csrfToken(), {
 		maxAge: 36000,
 		path: "/",
+		httpOnly: false,
 	});
 	return res.json({
 		status: 200,
