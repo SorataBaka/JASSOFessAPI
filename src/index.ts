@@ -45,7 +45,7 @@ app.use(
 			"XSRF-TOKEN",
 			"Cookie",
 		],
-		maxAge: 360000,
+		maxAge: 24 * 60 * 60 * 60 * 1000,
 		origin: trueOrigin,
 		methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
 		preflightContinue: false,
@@ -77,7 +77,7 @@ app.use(function (err: Error, req: Request, res: Response, next: NextFunction) {
 
 app.all("/", (req: Request, res: Response) => {
 	res.cookie("XSRF-TOKEN", req.csrfToken(), {
-		maxAge: 64000,
+		maxAge: 24 * 60 * 60 * 60 * 1000,
 		path: "/",
 	});
 	return res.json({
