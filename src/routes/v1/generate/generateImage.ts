@@ -38,10 +38,10 @@ export default async (req: Request, res: Response) => {
 		});
 	const confessionText = confession[0].confession;
 	const confessionTime = confession[0].date;
-	const confessionDate = confessionTime.toDateString();
-	const confessionTimeString = confessionTime.toLocaleTimeString();
-	const confessionDateTime = confessionDate + " " + confessionTimeString;
+	const confessionDate = confessionTime.toLocaleString("ja-JP");
+	const confessionSource = confession[0].branch;
 
+	const newtext = confessionText.replace(/[^\p{L}\p{N}\p{P}\p{Z}^$\n]/gu, ".");
 	const randomNumberPicker = Math.floor(Math.random() * colorArray.length + 0);
 	const newImage = new Jimp(
 		1080,
@@ -72,7 +72,7 @@ export default async (req: Request, res: Response) => {
 		50,
 		50,
 		{
-			text: confessionText,
+			text: newtext,
 			alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
 			alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE,
 		},
@@ -84,8 +84,20 @@ export default async (req: Request, res: Response) => {
 		50,
 		1030,
 		{
-			text: confessionDateTime,
+			text: "Posted On: " + confessionDate,
 			alignmentX: Jimp.HORIZONTAL_ALIGN_RIGHT,
+			alignmentY: Jimp.VERTICAL_ALIGN_BOTTOM,
+		},
+		980,
+		20
+	);
+	newImage.print(
+		FooterFont,
+		50,
+		1030,
+		{
+			text: "Branch: " + confessionSource,
+			alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT,
 			alignmentY: Jimp.VERTICAL_ALIGN_BOTTOM,
 		},
 		980,
