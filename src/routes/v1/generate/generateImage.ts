@@ -38,7 +38,9 @@ export default async (req: Request, res: Response) => {
 		});
 	const confessionText = confession[0].confession;
 	const confessionTime = confession[0].date;
-	const confessionDate = confessionTime.toLocaleString("ja-JP");
+	const confessionDate = confessionTime.toLocaleString("ja-JP", {
+		timeZone: "Asia/Tokyo",
+	});
 	const confessionSource = confession[0].branch;
 
 	const newtext = confessionText.replace(/[^\p{L}\p{N}\p{P}\p{Z}^$\n]/gu, ".");
