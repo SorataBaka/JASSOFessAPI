@@ -53,7 +53,7 @@ app.use(
 		optionsSuccessStatus: 200,
 	})
 );
-app.use(
+!isDevelopment && app.use(
 	csurf({
 		cookie: true,
 		value: (req: Request) => {
