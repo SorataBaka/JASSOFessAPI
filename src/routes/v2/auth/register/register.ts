@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import crypto from "crypto";
 import users from "../../../../schemas/users";
-const alphaNumericCheck = new RegExp("^[a-zA-Z0-9_]{7, 15}*$");
+const alphaNumericCheck = new RegExp("^[a-zA-Z0-9_]*$");
 export default async function(req:Request, res:Response){
     const username = req.body["username"];
     const password = req.body["password"];
