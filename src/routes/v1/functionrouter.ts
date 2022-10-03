@@ -6,7 +6,6 @@ import retrieve from "./generate/retrieve";
 import list from "./list/listmessages";
 import upload from "./upload/upload";
 import express from "express";
-
 const functionRouter = express.Router();
 
 functionRouter.get("/retrieve/:id", retrieve);
@@ -28,5 +27,6 @@ functionRouter.get("/generate", (_req: Request, res: Response) => {
 		},
 	});
 });
+
 
 export default functionRouter;
